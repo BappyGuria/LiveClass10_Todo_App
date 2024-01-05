@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'add_new_todo_modal.dart';
+import 'update_todo_modal.dart';
+
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
 
@@ -20,7 +23,40 @@ class MyHomePage extends StatelessWidget {
           itemCount: 10,
           itemBuilder: (context, index) => ListTile(
                 onTap: () {
-                  print('Hello Word!');
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('Actions'),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              ListTile(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (context) =>
+                                        const UpdateTodoModal(),
+                                  );
+                                },
+                                title: const Text('Update'),
+                                leading: const Icon(Icons.edit),
+                              ),
+                              const Divider(
+                                height: 5,
+                              ),
+                              ListTile(
+                                leading: const Icon(Icons.delete),
+                                title: const Text('Delete'),
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                              )
+                            ],
+                          ),
+                        );
+                      });
                 },
                 title: const Text('Hello Word !'),
                 leading: Text('${index + 1}'),
@@ -29,43 +65,11 @@ class MyHomePage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showModalBottomSheet(
-              context: context,
-              builder: (context) {
-                return Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    children: [
-                      const Text(
-                        'Add New Todo',
-                        style: TextStyle(fontSize: 25),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                            hintText: 'Enter Your Todo',
-                            enabledBorder: OutlineInputBorder(),
-                            focusedBorder: OutlineInputBorder()),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.pinkAccent,
-                            foregroundColor: Colors.white
-                          ),
-                          child: const Text('Add')
-                        ),
-                      )
-                    ],
-                  ),
-                );
-              });
+            context: context,
+            builder: (context) {
+              return const AddNewTodoModal();
+            },
+          );
         },
         child: const Icon(Icons.add),
       ),
